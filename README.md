@@ -32,7 +32,7 @@ Caso algo dê errado, você pode recomeçar o procedimento dando o seguinte coma
 docker rm auth-and-accesscontrol
 ```
 
-### Instalando dependências
+## Instalando dependências
 
 Feito isso, o projeto já pode ser executado normalmente, bastando instalar as dependências do projeto:
 
