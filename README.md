@@ -59,3 +59,5 @@ ou
 ```
 npm run dev
 ```
+
+_Done!_ O projeto está devidamente configurado e rodando localmente. Aproveite!
