@@ -4,8 +4,6 @@ const app = express();
 const port = 3333;
 const connectToDB = require('./database/connection');
 
-const validUser = require('./models/User');
-
 connectToDB();
 
 app.use(express.json());
