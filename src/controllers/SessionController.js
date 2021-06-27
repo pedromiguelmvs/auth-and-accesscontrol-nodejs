@@ -1,9 +1,9 @@
-const Users = require('../models/User');
+const Users = require('../models/Users');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    async create(req, res) {
+    async store(req, res) {
         const { email, password } = req.body;
 
         const user = await Users.findOne({ where: { email } });

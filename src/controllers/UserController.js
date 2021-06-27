@@ -1,5 +1,6 @@
 const bcryptjs = require('bcryptjs');
-const Users = require('../models/User');
+const Users = require('../models/Users');
+const Posts = require('../models/Posts');
 const auth = require('../middlewares/auth');
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
     async index(req, res) {
         const { token } = req.headers;
 
-        await auth(token);
+        await auth(token, req, res);
 
         Users.sync().then(async () => {
             const users = await Users.findAll();
@@ -44,8 +45,9 @@ module.exports = {
             const { id } = req.params;
 
             const user = await Users.findOne({ where: { id } });
+            const posts = await Posts.findAll({ where: { UserId: id } });
 
-            return res.status(200).json({ user });
+            return res.status(200).json({ user, posts });
         });
     },
     async update(req, res) {

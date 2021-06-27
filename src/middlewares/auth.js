@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const auth = (token) => {
+const auth = (token, req, res) => {
     if (!token) {
         return res.status(403).json({ error: 'Usuário não autenticado!' });
     }

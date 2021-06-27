@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('postgres://postgres:docker@localhost:5432');
+const Posts = require('./Posts');
 
 class Users extends Model {}
 
@@ -14,7 +15,10 @@ Users.init({
     }
 }, {
     sequelize,
-    modelName: 'User'
+    modelName: 'Users'
 });
+
+Users.hasMany(Posts);
+Posts.belongsTo(Users);
 
 module.exports = Users;
