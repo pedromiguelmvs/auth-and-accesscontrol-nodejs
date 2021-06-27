@@ -1,11 +1,13 @@
+const bcryptjs = require('bcryptjs');
 const Users = require('../models/User');
+const auth = require('../middlewares/auth');
 
 module.exports = {
     async store(req, res) {
         Users.sync().then(async () => {
-            const { username, email } = req.body;
+            const { email, password } = req.body;
 
-            if (!username || !email) {
+            if (!email || !password) {
                 return res.status(422).json({ error: 'Preencha todos os campos necessários.' });
             }
             
@@ -14,13 +16,23 @@ module.exports = {
             if (userExists) {
                 return res.status(409).json({ error: 'Usuário já existente' });
             }
-    
-            await Users.create({ username, email });
+
+            bcryptjs.hash(password, 10, async (err, hash) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Erro ao criptografar a senha' })
+                }
+
+                await Users.create({ email, password: hash });
+            });
             
-            return res.status(200).json({ username, email });
+            return res.status(200).json({ email });
         });
     },
     async index(req, res) {
+        const { token } = req.headers;
+
+        await auth(token);
+
         Users.sync().then(async () => {
             const users = await Users.findAll();
 
@@ -29,11 +41,30 @@ module.exports = {
     },
     async show(req, res) {
         Users.sync().then(async () => {
-            const { username } = req.params;
+            const { id } = req.params;
 
-            const users = await Users.findOne({ where: { username } });
+            const user = await Users.findOne({ where: { id } });
 
-            return res.status(200).json({ users });
+            return res.status(200).json({ user });
         });
+    },
+    async update(req, res) {
+        const { id } = req.params;
+        const { email, password } = req.body;
+
+        let user = await Users.findOne({ where: { id } });
+
+        bcryptjs.hash(password, 10, async (err, hash) => {
+            if (err) {
+                return res.status(500).json({ error: 'Erro ao criptografar a senha' })
+            }
+
+            user.email = email;
+            user.password = hash;
+
+            await user.save();
+        });
+
+        return res.status(200).json({ email });
     }
 }

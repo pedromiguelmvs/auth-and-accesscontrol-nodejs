@@ -5,7 +5,7 @@ module.exports = async () => {
     try {
         await sequelize.authenticate();
         console.log('deu bom fml');
-    } catch (e) {
+    } catch (error) {
         console.log('ih deu ruim: ' + error)
     }
 }

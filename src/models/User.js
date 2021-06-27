@@ -4,11 +4,11 @@ const sequelize = new Sequelize('postgres://postgres:docker@localhost:5432');
 class Users extends Model {}
 
 Users.init({
-    username: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     }
